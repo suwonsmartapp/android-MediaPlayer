@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import suwonsmartapp.com.mediaplayer.R;
+import suwonsmartapp.com.mediaplayer.fragments.AudioFragment;
 
 public class MediaListActivity extends AppCompatActivity {
 
@@ -26,5 +27,11 @@ public class MediaListActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contents, new AudioFragment())
+                    .commit();
+        }
     }
 }

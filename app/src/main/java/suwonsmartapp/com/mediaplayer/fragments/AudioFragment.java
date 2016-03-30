@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import suwonsmartapp.com.mediaplayer.R;
  * Created by junsuk on 16. 3. 29..
  */
 public class AudioFragment extends Fragment {
+    private static final String TAG = AudioFragment.class.getSimpleName();
+
     private RecyclerView mRecyclerView;
 
     @Nullable
@@ -32,12 +35,13 @@ public class AudioFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         MyAudioAdapter adapter = new MyAudioAdapter(getActivity().getContentResolver()
-        .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                null,
-                null,
-                null,
-                null));
+                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null));
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -63,10 +67,10 @@ public class AudioFragment extends Fragment {
             holder.id.setText("" + position);
             holder.title.setText(cursor.getString(
                     cursor.getColumnIndexOrThrow(
-                            MediaStore.Audio.AudioColumns.TITLE)));
+                            MediaStore.Audio.Media.TITLE)));
             holder.time.setText(cursor.getString(
                     cursor.getColumnIndexOrThrow(
-                            MediaStore.Audio.AudioColumns.DURATION)));
+                            MediaStore.Audio.Media.DURATION)));
         }
 
         @Override
