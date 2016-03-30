@@ -1,13 +1,17 @@
 package suwonsmartapp.com.mediaplayer.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import suwonsmartapp.com.mediaplayer.R;
+import suwonsmartapp.com.mediaplayer.activities.MediaListActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     @Nullable
@@ -28,10 +32,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.audio_card:
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.contents, new AudioFragment())
-                        .addToBackStack("audio")
-                        .commit();
+                View view = getView().findViewById(R.id.imageView);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                        view,
+                        "share");
+
+                ActivityCompat.startActivity(getActivity(), new Intent(getActivity(), MediaListActivity.class), options.toBundle());
                 break;
 
             case R.id.video_card:

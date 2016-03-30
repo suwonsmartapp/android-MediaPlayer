@@ -1,5 +1,6 @@
-package suwonsmartapp.com.mediaplayer;
+package suwonsmartapp.com.mediaplayer.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,10 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
+import suwonsmartapp.com.mediaplayer.R;
 import suwonsmartapp.com.mediaplayer.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -20,6 +25,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Transition 활성화 롤리팝 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+            Transition changeTransition = TransitionInflater.from(this).inflateTransition(R.transition.change_image);
+            getWindow().setSharedElementEnterTransition(changeTransition);
+//            getWindow().setEnterTransition(changeTransition);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -18,7 +18,9 @@
             android:orientation="vertical">
 
             <ImageView
-                android:src="@drawable/girl"
+                android:id="@+id/imageView"
+                android:transitionName="share"
+                android:src="@drawable/man300"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="150dp" />
@@ -45,7 +47,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:src="@drawable/man300"
+                android:src="@drawable/girl"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="150dp" />
