@@ -10,14 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import suwonsmartapp.com.mediaplayer.R;
 
 /**
  * Created by junsuk on 16. 3. 29..
  */
-public class AudioFragment extends Fragment {
+public class AudioFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String TAG = AudioFragment.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
@@ -40,12 +42,20 @@ public class AudioFragment extends Fragment {
                         null,
                         null,
                         null));
+        adapter.setOnItemClickListener(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+    }
+
     private static class MyAudioAdapter extends RecyclerView.Adapter<MyViewHolder> {
+
+        private AdapterView.OnItemClickListener mListener;
 
         private Cursor mCursor;
 
@@ -53,10 +63,23 @@ public class AudioFragment extends Fragment {
             mCursor = cursor;
         }
 
+        public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+            mListener = listener;
+        }
+
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_audio, parent, false);
-            return new MyViewHolder(itemView);
+            final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_audio, parent, false);
+            final MyViewHolder holder = new MyViewHolder(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onItemClick(null, itemView, holder.getAdapterPosition(), getItemId(holder.getAdapterPosition()));
+                    }
+                }
+            });
+            return holder;
         }
 
         @Override
