@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import suwonsmartapp.com.mediaplayer.R;
+import suwonsmartapp.com.mediaplayer.models.AudioInfo;
+import suwonsmartapp.com.mediaplayer.views.AudioPlayerView;
 
 /**
  * Created by junsuk on 16. 3. 29..
@@ -23,6 +25,8 @@ public class AudioFragment extends Fragment implements AdapterView.OnItemClickLi
     private static final String TAG = AudioFragment.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
+    private AudioPlayerView mAudioPlayer;
+    private MyAudioAdapter mAdapter;
 
     @Nullable
     @Override
@@ -35,22 +39,26 @@ public class AudioFragment extends Fragment implements AdapterView.OnItemClickLi
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mAudioPlayer = (AudioPlayerView) view.findViewById(R.id.audio_player);
 
-        MyAudioAdapter adapter = new MyAudioAdapter(getActivity().getContentResolver()
+        mAdapter = new MyAudioAdapter(getActivity().getContentResolver()
                 .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                         null,
                         null,
                         null,
                         null));
-        adapter.setOnItemClickListener(this);
+        mAdapter.setOnItemClickListener(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+        AudioInfo audioInfo = new AudioInfo(getActivity(), mAdapter.getItem(position));
+        mAudioPlayer.setAudioInfo(audioInfo);
     }
 
     private static class MyAudioAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -65,6 +73,11 @@ public class AudioFragment extends Fragment implements AdapterView.OnItemClickLi
 
         public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
             mListener = listener;
+        }
+
+        public Cursor getItem(int position) {
+            mCursor.moveToPosition(position);
+            return mCursor;
         }
 
         @Override
