@@ -34,9 +34,8 @@
             android:text="New Text" />
     </LinearLayout>
 
-    <ImageView
-        android:src="@drawable/ic_play_arrow_black_24dp"
-        android:scaleType="centerCrop"
+    <ImageButton
+        android:background="@drawable/ic_play_arrow_black_24dp"
         android:id="@+id/play_button"
         android:layout_width="50dp"
         android:layout_height="50dp" />

@@ -1,23 +1,31 @@
 package suwonsmartapp.com.mediaplayer.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import suwonsmartapp.com.mediaplayer.R;
 import suwonsmartapp.com.mediaplayer.models.AudioInfo;
+import suwonsmartapp.com.mediaplayer.sevices.MusicService;
 
-public class AudioPlayerView extends LinearLayout {
+public class AudioPlayerView extends LinearLayout implements View.OnClickListener {
 
     private final Context mContext;
     private TextView mTitleText;
     private TextView mArtistText;
     private ImageView mImageView;
+    private ImageButton mPlayButton;
+
+    private AudioInfo mAudioInfo;
+
+    private boolean isPlaying = false;
 
     public AudioPlayerView(Context context) {
         this(context, null);
@@ -39,7 +47,8 @@ public class AudioPlayerView extends LinearLayout {
         mTitleText = (TextView) view.findViewById(R.id.title_text);
         mArtistText = (TextView) view.findViewById(R.id.artist_text);
         mImageView = (ImageView) view.findViewById(R.id.imageView);
-
+        mPlayButton = (ImageButton) view.findViewById(R.id.play_button);
+        mPlayButton.setOnClickListener(this);
     }
 
     public void setTitle(String title) {
@@ -55,8 +64,23 @@ public class AudioPlayerView extends LinearLayout {
     }
 
     public void setAudioInfo(AudioInfo audioInfo) {
+        mAudioInfo = audioInfo;
+
         setTitle(audioInfo.getTitle());
         setArtist(audioInfo.getArtist());
         setImage(audioInfo.getImage());
+    }
+
+    @Override
+    public void onClick(View v) {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+            v.setBackgroundResource(R.drawable.ic_pause_black_24dp);
+        } else {
+            v.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
+        }
+        Intent intent = new Intent(mContext, MusicService.class);
+        intent.putExtra("uri", mAudioInfo.uri);
+        mContext.startService(intent);
     }
 }

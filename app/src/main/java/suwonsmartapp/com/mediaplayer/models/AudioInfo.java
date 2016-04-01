@@ -19,6 +19,7 @@ public class AudioInfo {
     private String artist;
     private String duration;
     private Bitmap image;
+    public Uri uri;
 
     public String getArtist() {
         return artist;
@@ -65,6 +66,7 @@ public class AudioInfo {
 
         Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID)));
+        this.uri = uri;
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(context, uri);
