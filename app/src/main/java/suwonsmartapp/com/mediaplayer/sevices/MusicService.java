@@ -13,6 +13,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.NotificationCompat;
 
 import suwonsmartapp.com.mediaplayer.R;
+import suwonsmartapp.com.mediaplayer.activities.MediaListActivity;
 
 public class MusicService extends Service {
 
@@ -60,6 +61,11 @@ public class MusicService extends Service {
         builder.addAction(R.drawable.ic_pause_black_24dp, "pause", pendingIntent);
         builder.addAction(android.R.drawable.ic_media_previous, "prew", null);
         builder.addAction(android.R.drawable.ic_media_next, "next", null);
+
+        Intent launchMusicActivityIntent = new Intent(this, MediaListActivity.class);
+        PendingIntent sender = PendingIntent.getActivity(this, 1, launchMusicActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(sender);
 
         Notification notification = builder.build();
 
