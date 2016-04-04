@@ -3,6 +3,7 @@ package suwonsmartapp.com.mediaplayer.views;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.media.MediaMetadataCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,8 +80,16 @@ public class AudioPlayerView extends LinearLayout implements View.OnClickListene
         } else {
             v.setBackgroundResource(R.drawable.ic_play_arrow_black_24dp);
         }
+
+        MediaMetadataCompat metadataCompat = new MediaMetadataCompat.Builder()
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mAudioInfo.getImage())
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, mAudioInfo.getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, mAudioInfo.getArtist())
+                .build();
+
         Intent intent = new Intent(mContext, MusicService.class);
         intent.putExtra("uri", mAudioInfo.uri);
+        intent.putExtra("metadata", metadataCompat);
         mContext.startService(intent);
     }
 }
