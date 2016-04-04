@@ -97,14 +97,13 @@ public class MusicService extends Service {
     }
 
     private Notification getKitkatNotification(Intent intent) {
-        MediaMetadataCompat metadataCompat = intent.getParcelableExtra("metadata");
-        if (mSession == null) {
-            mSession = new MediaSessionCompat(this, "tag", null, null);
-            mSession.setMetadata(metadataCompat);
-        }
+//        MediaMetadataCompat metadataCompat = intent.getParcelableExtra("metadata");
+//        if (mSession == null) {
+//            mSession = new MediaSessionCompat(this, "tag", null, null);
+//            mSession.setMetadata(metadataCompat);
+//        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setLargeIcon(metadataCompat.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART));
 
         RemoteViews views = new RemoteViews(getPackageName(), R.layout.noti);
         views.setImageViewResource(R.id.image_view, R.mipmap.ic_launcher);
