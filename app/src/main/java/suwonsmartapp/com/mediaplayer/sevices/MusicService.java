@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.app.NotificationCompat;
+import android.widget.RemoteViews;
 
 import suwonsmartapp.com.mediaplayer.R;
 import suwonsmartapp.com.mediaplayer.activities.MediaListActivity;
@@ -36,6 +37,31 @@ public class MusicService extends Service {
             }
         }
 
+//        Notification notification = getLollipopNotification(intent);
+        Notification notification = getKitkatNotification(intent);
+
+
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+//        notificationManagerCompat.notify(1, notification);
+
+        startForeground(1, notification);
+
+        Uri uri = intent.getParcelableExtra("uri");
+
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+        } else {
+
+            mMediaPlayer.start();
+
+        }
+
+        return START_REDELIVER_INTENT;
+    }
+
+    private Notification getLollipopNotification(Intent intent) {
         MediaMetadataCompat metadataCompat = intent.getParcelableExtra("metadata");
         if (mSession == null) {
             mSession = new MediaSessionCompat(this, "tag", null, null);
@@ -59,7 +85,7 @@ public class MusicService extends Service {
         builder.setColor(0xFFDB4437);
         builder.setLargeIcon(metadataCompat.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART));
         builder.addAction(R.drawable.ic_pause_black_24dp, "pause", pendingIntent);
-        builder.addAction(android.R.drawable.ic_media_previous, "prew", null);
+        builder.addAction(android.R.drawable.ic_media_previous, "prev", null);
         builder.addAction(android.R.drawable.ic_media_next, "next", null);
 
         Intent launchMusicActivityIntent = new Intent(this, MediaListActivity.class);
@@ -67,27 +93,27 @@ public class MusicService extends Service {
 
         builder.setContentIntent(sender);
 
-        Notification notification = builder.build();
+        return builder.build();
+    }
 
-
-//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-//        notificationManagerCompat.notify(1, notification);
-
-        startForeground(1, notification);
-
-        Uri uri = intent.getParcelableExtra("uri");
-
-        mMediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-
-        if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.stop();
-        } else {
-
-            mMediaPlayer.start();
-
+    private Notification getKitkatNotification(Intent intent) {
+        MediaMetadataCompat metadataCompat = intent.getParcelableExtra("metadata");
+        if (mSession == null) {
+            mSession = new MediaSessionCompat(this, "tag", null, null);
+            mSession.setMetadata(metadataCompat);
         }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setLargeIcon(metadataCompat.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART));
 
-        return START_REDELIVER_INTENT;
+        RemoteViews views = new RemoteViews(getPackageName(), R.layout.noti);
+        views.setImageViewResource(R.id.image_view, R.mipmap.ic_launcher);
+        views.setTextViewText(R.id.title_text, "타이틀");
+
+        builder.setContent(views);
+        builder.setContentIntent(null);
+
+        return builder.build();
     }
 
     @Nullable
