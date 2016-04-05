@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import suwonsmartapp.com.mediaplayer.R;
 import suwonsmartapp.com.mediaplayer.activities.MediaListActivity;
+import suwonsmartapp.com.mediaplayer.activities.VideoActivity;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     @Nullable
@@ -41,6 +42,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.video_card:
+
+                startActivity(new Intent(getActivity(), VideoActivity.class));
                 break;
         }
     }

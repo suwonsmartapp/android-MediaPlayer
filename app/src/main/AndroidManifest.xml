@@ -27,7 +27,9 @@
 
         <service
             android:name=".sevices.MusicService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".activities.VideoActivity"></activity>
     </application>
 
 </manifest>
